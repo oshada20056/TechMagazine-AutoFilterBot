@@ -40,7 +40,7 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 # Others
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1001946514305'))
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', '')
-P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "True")), True)
+P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "False")), False)
 IMDB = is_enabled((environ.get('IMDB', "False")), True)
 SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "True")), False)
 CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", "🎈<b>ᴊᴏɪɴ [ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ](https://t.me/FilmStudiohub2)</b>💤\n\n📂𝐹𝑖𝑙𝑒 : <code>{file_name}</code>\n\n📼𝑆𝑖𝑧𝑒 : <i>{file_size}<i>\n\n𝐺𝑟𝑜𝑢𝑝📥 :<a href=https://t.me/Filmstudiodl> ©ꜰɪʟᴍ ꜱᴛᴜᴅɪᴏ</a>")
