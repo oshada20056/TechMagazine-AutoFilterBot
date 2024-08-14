@@ -11,26 +11,38 @@ def is_enabled(value, default):
         return default
 
 # Bot information
-# Bot information
-SESSION = environ.get('SESSION', 'Movies_search')
-API_ID = int(environ.get('API_ID', '21204722'))
-API_HASH = environ.get('API_HASH', '4f5b4bbc15e7f9df9961ac92e8fd219b')
-BOT_TOKEN = environ.get('BOT_TOKEN', "5755441254:AAHFE53F_mMEOOD5-QQEkrDKkfu4zKa_Brc")
+SESSION = environ.get('SESSION', 'Media_search')
+API_ID = int(environ.get('API_ID', ''))
+API_HASH = environ.get('API_HASH', '')
+BOT_TOKEN = environ.get('BOT_TOKEN', '')
+PORT = environ.get("PORT", "8080")
 
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 0))
 USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True))
-PICS = (environ.get('PICS', 'https://te.legra.ph/file/c4c1d4f95fd95772541e3.jpg')).split()
+BOT_START_TIME = time()
+
+# Bot images & videos
+PICS = (environ.get('PICS', 'https://ibb.co/ccHNNyj')).split()
+REQ_PICS = (environ.get('REQ_PICS', 'https://ibb.co/ccHNNyj')).split()
+NOR_IMG = environ.get("NOR_IMG", "https://ibb.co/ccHNNyj")
+MELCOW_VID = environ.get("MELCOW_VID", "")
+SPELL_IMG = environ.get("SPELL_IMG", "https://ibb.co/ccHNNyj")
 
 # Admins, Channels & Users
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '5310455183').split()]
 CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '0').split()]
 auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
 AUTH_USERS = (auth_users + ADMINS) if auth_users else []
-auth_channel = environ.get('AUTH_CHANNEL', '')
+auth_channel = environ.get('AUTH_CHANNEL')
 auth_grp = environ.get('AUTH_GROUP')
 AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
 AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
+support_chat_id = environ.get('SUPPORT_CHAT_ID')
+reqst_channel = environ.get('REQST_CHANNEL_ID')
+REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
+SUPPORT_CHAT_ID = -1001946514305
+NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", True))
 
 # MongoDB information
 DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://filmxyz036:filmxyz036@filmxyzfilterbot.nma2d.mongodb.net/?retryWrites=true&w=majority")
@@ -38,20 +50,25 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "filmxyz036")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 
 # Others
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1001946514305'))
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', '')
-P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "False")), False)
+DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '0').split()]
+MAX_B_TN = environ.get("MAX_B_TN", "10")
+MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', 0))
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'filmstudodl')
+P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "True")), False)
 IMDB = is_enabled((environ.get('IMDB', "False")), True)
-SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "True")), False)
-CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", "🎈<b>ᴊᴏɪɴ [ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ](https://t.me/FilmStudiohub2)</b>💤\n\n📂𝐹𝑖𝑙𝑒 : <code>{file_name}</code>\n\n📼𝑆𝑖𝑧𝑒 : <i>{file_size}<i>\n\n𝐺𝑟𝑜𝑢𝑝📥 :<a href=https://t.me/Filmstudiodl> ©ꜰɪʟᴍ ꜱᴛᴜᴅɪᴏ</a>")
-BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", "🎈<b>ᴊᴏɪɴ [ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ](https://t.me/FilmStudiohub2)</b>💤\n\n📂𝙵𝙸𝙻𝙴 : <code>{file_name}</code>\n\n📼𝚂𝙸𝚉𝙴 : <i>{file_size}<i>\n\n𝐺𝑟𝑜𝑢𝑝📥 :<a href=https://t.me/Filmstudiodl> ©ꜰɪʟᴍ ꜱᴛᴜᴅɪᴏ</a>")
-IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", "🎈ʜᴇʏ, {message.from_user.mention} 𝙱𝚁𝙾\n ᴀʀᴇ ʏᴏᴜ ʟᴏᴏᴋɪɴɢ ꜰᴏʀ ᴛʜɪꜱ ᴍᴏᴠɪᴇ?\n 👉 {query} 👈\n\n<b>♥️𝑇𝑖𝑡𝑙𝑒</b>: <a href={url}>{title}</a>\n🎭 𝐺𝑒𝑛𝑒𝑟𝑒𝑠: {genres}\n📆 𝑌𝑒𝑎𝑟: <a href={url}/releaseinfo>{year}</a>\n🌟 𝑅𝑎𝑡𝑖𝑛𝑔: <a href={url}/ratings>{rating}</a> / 10 (𝐵𝑎𝑠𝑒𝑑 𝑂𝑛 {votes} 𝑈𝑠𝑒𝑟 𝑅𝑎𝑡𝑖𝑛𝑔𝑠.)\n💽 𝑅𝑢𝑛𝑡𝑖𝑚𝑒: {runtime} Minutes\n📆 𝑅𝑒𝑙𝑒𝑎𝑠𝑒 : {release_date}\n🌍 𝐶𝑜𝑢𝑛𝑡𝑟𝑖𝑒𝑠: <code>{countries}</code>\n\n <a href=https://t.me/FilmStudiohub2>©𝖥𝗂𝗅𝗆𝖲𝗍𝗎𝖽𝗂𝗈</a>")
+AUTO_FFILTER = is_enabled((environ.get('AUTO_FFILTER', "True")), True)
+AUTO_DELETE = is_enabled((environ.get('AUTO_DELETE', "False")), True)
+SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "True")), True)
+CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION",' \n\n❤️‍🔥 <b>𝖲𝗎𝗉𝗉𝗈𝗋𝗍 </b> [𝖶𝖾𝖻](https://filmxyz.site)')
+BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", '')
+IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", '🏷 𝖳𝗂𝗍𝗅𝖾: <a href={url}>{title}</a> \n🔮 𝖸𝖾𝖺𝗋: {year} \n⭐️ 𝖱𝖺𝗍𝗂𝗇𝗀𝗌: {rating}/ 10  \n🎭 𝖦𝖾𝗇𝖾𝗋𝗌: {genres} \n\n')
 LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "False"), False)
-SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "Ture"), True)
+SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "True"), True)
 MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
 INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
 FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '')).split()]
-MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "True")), True)
+MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "False")), False)
 PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "False")), False)
 PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "False")), True)
 
